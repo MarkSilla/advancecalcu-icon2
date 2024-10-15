@@ -154,7 +154,7 @@ public class dataBoysCalculator {
         createRoundedButton("B", 95, 470, listener, frame, 65, new Color(102,102,102), Color.WHITE);
         createRoundedButton("C", 165, 470, listener, frame, 65, new Color(102,102,102), Color.WHITE);
         createRoundedButton("D", 235, 470, listener, frame, 65, new Color(102,102,102), Color.WHITE);
-        createRoundedImageButton("equationimages/asumb.png", 305, 470, listener, frame, 80, 40, "a+b");
+        createRoundedImageButton("equationimages/asumb.png", 305, 470, listener, frame, 80, 40, "a!+b!");
         createRoundedImageButton("equationimages/adivb.png", 415, 470, listener, frame, 70, 40, "a/b");       
         createRoundedImageButton("equationimages/x.png", 25, 525, listener, frame, 50, 40, "xy");        
         createRoundedImageButton("equationimages/xsumy.png", 105, 525, listener, frame, 50, 40, "x+y");        
@@ -261,11 +261,49 @@ private void ButtonClick(ActionEvent e, ImageTextField display) {
         case "∏∏":
             requestDoubleProductInput(display);
         break;
+        case "a!+b!":
+                calculateFactorialSum(display);
+            break;
         default:
             handleDefaultCommand(command, display);
             break;
     }
 }
+// for a!+b!
+private void calculateFactorialSum(ImageTextField display) {
+    String aInput = JOptionPane.showInputDialog("Enter the first number (a) for a!:");
+    if (aInput == null || aInput.trim().isEmpty()) {
+        display.setText("Error: No input for a!");
+        return; 
+    }
+
+    String bInput = JOptionPane.showInputDialog("Enter the second number (b) for b!:");
+    if (bInput == null || bInput.trim().isEmpty()) {
+        display.setText("Error: No input for b!");
+        return; 
+    }
+
+    try {
+        int a = Integer.parseInt(aInput.trim());
+        int b = Integer.parseInt(bInput.trim());
+
+        if (a < 0 || b < 0) {
+            display.setText("Error: Factorial is not defined for negative numbers.");
+            return; 
+        }
+
+        BigInteger factorialA = factorial(a);
+        BigInteger factorialB = factorial(b);
+        BigInteger result = factorialA.add(factorialB);
+
+        display.setText("" + result.toString());
+    } catch (NumberFormatException ex) {
+        display.setText("Error: Invalid input. Please enter integers.");
+    } catch (Exception e) {
+        display.setText("Error: " + e.getMessage());
+    }
+}
+
 // for Summation
 private void performSummation(ImageTextField display) {
     String limits = JOptionPane.showInputDialog("Enter lower and upper limits separated by a comma (e.g., 1, 10):");
@@ -624,14 +662,6 @@ private void handleIconCommand(String command, ImageTextField display) {
         case "Σ": 
         performSummation(display);
         break;
-        case "log x":
-                display.setText("Enter log(base,value): ");
-            break;
-            
-        
-        case "√":
-                
-            break;
         
         default:
             break;
